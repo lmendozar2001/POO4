@@ -1,26 +1,33 @@
 int saved=8;
 int contador=0;
-PImage image;
-boolean pix = true; 
-Shape[]shapes;
-Boton []botones;
+int gana=0;
+int niveles=1;
 boolean drawGrid;
 boolean crea;
 boolean guarda;
 boolean juega;
-int gana=0;
+boolean instruc;
+boolean pix = true; 
+PImage image, m1, m2, m3,i,j,k,l,s,g;
+Shape[]shapes;
+Boton []botones;
 
 void setup() {
   size(900, 600);
-  botones= new Boton[2];
-  botones[0]= new Boton(color(108,134,188),450,350,75,0,"Jugar",55);
-  botones[1]= new Boton(color(108,134,188),450,450,75,0,"modo creador",15);
+  imagenes();
+  botones= new Boton[3];
+  botones[0]= new Boton(color(108,134,188),450,300,75,0,"Jugar",55);
+  botones[1]= new Boton(color(108,134,188),450,400,75,0,"Modo Creador",15);
+  botones[2]= new Boton(color(108,134,188),450,500,75,0,"Como Jugar",25);  
   niveles();
 }
 
 
 void draw(){
   menu();
+  if(instruc==true){
+    instrucciones();
+  }
   if (juega || crea ){ 
     background(205);
     if (juega == true && crea == false){
@@ -41,7 +48,7 @@ void draw(){
     if ( pix == false){
       gana= gana + 1;
       setup();
-      if(gana > 7){
+      if((gana+1)==saved){
         ganador();
       }
     }
@@ -102,6 +109,7 @@ void keyPressed() {
     if (key== ENTER){
         juega=false;
         crea=false;
+        instruc=false;
     }
 }
 
@@ -113,12 +121,14 @@ void keyReleased(){
     }
     if (key== ENTER){
         setup();
-        draw();
+        redraw();
     }    
 }
 
 void menu(){
   background(178,70,57);
+  image(m1,600,250,200,225);
+  image(m2,100,300,200,200);
   fill(255);
   textSize (100);
   rectMode(CENTER);
@@ -127,11 +137,14 @@ void menu(){
     bot.draw();
     bot.selec();
   }
-  if (botones[0].selec == true && crea==false && juega == false){
+  if (botones[0].selec == true && crea==false && juega == false && instruc == false ){
     juega = true;
   }
-  if (botones[1].selec == true  && crea==false && juega == false){
+  if (botones[1].selec == true  && crea==false && juega == false && instruc == false){
     crea = true;
+  }
+  if (botones[2].selec == true && crea==false && juega == false && instruc == false){
+    instruc = true;
   }  
 }
 
@@ -147,50 +160,38 @@ void inicio(){
 }
 
 void niveles(){
-  if(gana==0){
-    nivel1();
-  }if(gana==1){
-    nivel2();
-  }if(gana==2){
-    nivel3();
-  }
-  if(gana==3){
-    nivel4();
-  }
-  if(gana==3){
-    nivel5();
-  }
-  if(gana==3){
-    nivel6();
-  }  
+   nivel();   
 }
 
-void nivel1(){
-  image=loadImage("tang_1.png");
+void nivel(){
+  image=loadImage("tang_"+(gana+1)+".png");
   inicio();
 }
 
-void nivel2(){
-  image=loadImage("tang_2.png");
-  inicio();
+void imagenes(){
+  m1=loadImage("1.png");
+  m2=loadImage("2.png");
+  i=loadImage("i.png");
+  k=loadImage("k.png");
+  l=loadImage("l.png");
+  g=loadImage("g.png");
+  j=loadImage("j.png");
+  s=loadImage("s.png");
 }
-void nivel3(){
-  image=loadImage("tang_3.jpg");
-  inicio();
-}
-void nivel4(){
-  image=loadImage("tang_4.jpg");
-  inicio();
-}
-void nivel5(){
-  image=loadImage("tang_5.jpg");
-  inicio();
-}
-void nivel6(){
-  image=loadImage("tang_6.jpg");
-  inicio();
-}
-void nivel7(){
-  image=loadImage("tang_7.jpg");
-  inicio();
+
+void instrucciones(){
+  background(46);
+  fill(255);
+  textSize(40);
+  text("Mover figuras con el mouse",150,100);
+  text("Rotar figura",300,200);
+  image(l,225,150,75,75);
+  image(j,150,150,75,75);  
+  text("Espejo paralelogramo",300,300);
+  image(i,150,250,75,75);
+  image(k,225,250,75,75);
+  text("Guarda figura",300,400);
+  image(s,187,350,75,75);
+  text("Cuadricula",300,500);
+  image(g,187,450,75,75);
 }
